@@ -4,9 +4,6 @@ import javax.persistence.*
 
 /**
  * 권한 정보를 저장하는 Entity 클래스 입니다.
- *
- * @author 김성길
- * @since 1.0.0
  */
 @Entity
 class Authentication(

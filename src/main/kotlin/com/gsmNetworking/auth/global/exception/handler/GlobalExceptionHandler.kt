@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 /**
  * 전역적으로 예외 클래스를 핸들링 하는 클래스 입니다.
- *
- * @author 김성길
- * @since 1.0.0
  */
 @RestControllerAdvice
 class GlobalExceptionHandler {
