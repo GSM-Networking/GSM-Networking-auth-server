@@ -1,0 +1,13 @@
+package com.gsmNetworking.auth.domain.auth.domain
+
+import javax.persistence.*
+
+@Entity
+class Authentication(
+    @Id
+    val email: String,
+    @Column(name = "provider_id", nullable = false)
+    val providerId: String,
+    @Enumerated(EnumType.STRING)
+    val authority: Authority
+)
