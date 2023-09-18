@@ -1,5 +1,6 @@
 package com.gsmNetworking.auth.global.security
 
+import com.gsmNetworking.auth.global.security.filter.config.FilterConfig
 import com.gsmNetworking.auth.global.security.oauth.CustomOauth2UserService
 import com.gsmNetworking.auth.global.security.oauth.properties.Oauth2Properties
 import org.springframework.context.annotation.Bean
@@ -25,6 +26,7 @@ class SecurityConfig(
             .formLogin().disable()
             .httpBasic().disable()
             .csrf().disable()
+            .apply(FilterConfig())
         logout(http)
         oauth2Login(http)
         return http.build()
