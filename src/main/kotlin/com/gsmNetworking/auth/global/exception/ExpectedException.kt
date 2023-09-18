@@ -1,6 +1,5 @@
 package com.gsmNetworking.auth.global.exception
 
-import com.gsmNetworking.auth.global.exception.model.ErrorCode
 import org.springframework.http.HttpStatus
 
 /**
@@ -8,17 +7,5 @@ import org.springframework.http.HttpStatus
  */
 class ExpectedException(
     val status: HttpStatus,
-    override val message: String,
-    val errorCode: ErrorCode
-): RuntimeException(message) {
-
-    /**
-     * 분기처리가 필요하지 않은 상황일때 사용되는 생성자 입니다.
-     */
-    constructor(status: HttpStatus, message: String): this(
-        status = status,
-        message = message,
-        errorCode = ErrorCode.EXCEPTION
-    )
-
-}
+    override val message: String
+): RuntimeException(message)
