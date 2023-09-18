@@ -3,8 +3,10 @@ package com.gsmNetworking.auth.global.security.oauth
 import com.gsmNetworking.auth.domain.auth.domain.Authentication
 import com.gsmNetworking.auth.domain.auth.domain.Authority
 import com.gsmNetworking.auth.domain.auth.repository.AuthenticationRepository
+import com.gsmNetworking.auth.global.exception.ExpectedException
 import com.gsmNetworking.auth.global.security.oauth.dto.UserInfo
 import com.gsmNetworking.auth.global.security.oauth.properties.Oauth2Properties
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
@@ -22,8 +24,9 @@ class CustomOauth2UserService(
         val delegateOauth2UserService = DefaultOAuth2UserService()
         val oauth2User = delegateOauth2UserService.loadUser(userRequest)
 
-        val providerId = oauth2User.name
         val email = oauth2User.attributes[Oauth2Properties.EMAIL].toString()
+        validateEmailDomain(email)
+        val providerId = oauth2User.name
         val authority = getAuthority(email, providerId).authority
         val userNameAttributeName = userRequest.clientRegistration
             .providerDetails.userInfoEndpoint.userNameAttributeName
@@ -36,6 +39,13 @@ class CustomOauth2UserService(
         val authorities = mutableListOf(SimpleGrantedAuthority(authority.name))
 
         return UserInfo(authorities, attributes, userNameAttributeName)
+    }
+
+    private fun validateEmailDomain(email: String) {
+        val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
+        if (!regex.matches(email)) {
+            throw ExpectedException(HttpStatus.BAD_REQUEST, "요청한 이메일이 GSM 학생용 이메일이 아닙니다.")
+        }
     }
 
     private fun getAuthority(email: String, providerId: String): Authentication =
