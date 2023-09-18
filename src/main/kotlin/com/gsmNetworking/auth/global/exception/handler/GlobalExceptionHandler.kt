@@ -22,11 +22,6 @@ class GlobalExceptionHandler {
     fun handler(e: ExpectedException): ResponseEntity<ExceptionResponse> =
         ResponseEntity
             .status(e.status)
-            .body(
-                ExceptionResponse(
-                    message = e.message,
-                    errorCode = e.errorCode
-                )
-            )
+            .body(ExceptionResponse(message = e.message))
 
 }
