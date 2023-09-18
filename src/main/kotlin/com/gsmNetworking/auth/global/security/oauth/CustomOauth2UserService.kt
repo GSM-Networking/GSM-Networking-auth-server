@@ -27,7 +27,7 @@ class CustomOauth2UserService(
         val email = oauth2User.attributes[Oauth2Properties.EMAIL].toString()
         validateEmailDomain(email)
         val providerId = oauth2User.name
-        val authority = getAuthority(email, providerId).authority
+        val authority = getAuthenticationIsNullSave(email, providerId).authority
         val userNameAttributeName = userRequest.clientRegistration
             .providerDetails.userInfoEndpoint.userNameAttributeName
         val attributes = mapOf(
@@ -48,7 +48,7 @@ class CustomOauth2UserService(
         }
     }
 
-    private fun getAuthority(email: String, providerId: String): Authentication =
+    private fun getAuthenticationIsNullSave(email: String, providerId: String): Authentication =
         authenticationRepository.findByProviderId(providerId) ?: saveAuthentication(email, providerId)
 
     private fun saveAuthentication(email: String, providerId: String): Authentication {
