@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository
  */
 interface AuthenticationRepository: CrudRepository<Authentication, String> {
 
+    fun findByEmail(email: String): Authentication?
     fun findByProviderId(providerId: String): Authentication?
 
 }
