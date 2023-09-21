@@ -37,8 +37,8 @@ class CustomUrlAuthenticationSuccessHandler(
 
     private fun saveRefreshToken(token: String, email: String) {
         val refreshToken = RefreshToken(
-            email = email,
             token = token,
+            email = email,
             expirationTime = jwtExpTimeProperties.refreshExp
         )
         refreshTokenRepository.save(refreshToken)
