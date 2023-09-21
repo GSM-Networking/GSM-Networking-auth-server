@@ -8,6 +8,7 @@ enum class Authority(
 ) {
 
     ROLE_UNAUTHENTICATED("UNAUTHENTICATED"),
+    ROLE_TEMP_USER("TEMP_USER"),
     ROLE_USER("USER"),
     ROLE_ADMIN("ADMIN")
 
