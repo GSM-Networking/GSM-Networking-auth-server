@@ -30,7 +30,8 @@ class CustomLogoutSuccessHandler(
     ) {
         response.status = HttpServletResponse.SC_OK
         if (authentication != null) {
-            refreshTokenRepository.deleteById(authentication.name)
+            val refreshToken = refreshTokenRepository.findByEmail(authentication.name)
+            refreshTokenRepository.deleteById(refreshToken.token)
         } else sendErrorResponse(response)
         response.sendRedirect(oauth2Properties.redirectUri)
     }
