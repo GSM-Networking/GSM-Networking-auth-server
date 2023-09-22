@@ -13,10 +13,12 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
+@Transactional(rollbackFor = [Exception::class])
 class CustomUrlAuthenticationSuccessHandler(
     private val tokenGenerator: TokenGenerator,
     private val refreshTokenRepository: RefreshTokenRepository,
