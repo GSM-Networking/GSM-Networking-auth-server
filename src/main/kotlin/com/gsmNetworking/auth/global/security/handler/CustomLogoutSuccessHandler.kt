@@ -2,7 +2,9 @@ package com.gsmNetworking.auth.global.security.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gsmNetworking.auth.domain.auth.repository.RefreshTokenRepository
+import com.gsmNetworking.auth.global.exception.ExpectedException
 import com.gsmNetworking.auth.global.security.oauth.properties.Oauth2Properties
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.Authentication
@@ -30,8 +32,9 @@ class CustomLogoutSuccessHandler(
     ) {
         response.status = HttpServletResponse.SC_OK
         if (authentication != null) {
-            val refreshToken = refreshTokenRepository.findByEmail(authentication.name)
-            refreshTokenRepository.deleteById(refreshToken.token)
+            val refreshToken = refreshTokenRepository.findByIdOrNull(authentication.name)
+                ?: throw ExpectedException(HttpStatus.NOT_FOUND, "존재하지 않는 refresh token 입니다.")
+            refreshTokenRepository.delete(refreshToken)
         } else sendErrorResponse(response)
         response.sendRedirect(oauth2Properties.redirectUri)
     }

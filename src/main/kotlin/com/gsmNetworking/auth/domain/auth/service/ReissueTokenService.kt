@@ -8,7 +8,6 @@ import com.gsmNetworking.auth.global.security.jwt.TokenGenerator
 import com.gsmNetworking.auth.global.security.jwt.TokenParser
 import com.gsmNetworking.auth.global.security.jwt.dto.TokenResponse
 import com.gsmNetworking.auth.global.security.jwt.properties.JwtExpTimeProperties
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -38,13 +37,12 @@ class ReissueTokenService(
      */
     fun execute(token: String): TokenResponse {
         val parsedToken = tokenParser.parseRefreshToken(token)
-        val refreshToken = refreshTokenRepository.findByIdOrNull(parsedToken)
+        val refreshToken = refreshTokenRepository.findByToken(parsedToken)
             ?: throw ExpectedException(HttpStatus.NOT_FOUND, "존재하지 않는 refresh token 입니다.")
         val authentication = authenticationRepository.findByEmail(refreshToken.email)
             ?: throw ExpectedException(HttpStatus.NOT_FOUND, "refresh token subject인 email을 찾을 수 없습니다.")
         val tokenDto = tokenGenerator.generateToken(refreshToken.email, authentication.authority)
         saveRefreshToken(tokenDto.refreshToken, authentication.email)
-        deleteBeforeRefreshToken(refreshToken)
         return tokenDto
     }
 
@@ -55,10 +53,6 @@ class ReissueTokenService(
             expirationTime = jwtExpTimeProperties.refreshExp
         )
         refreshTokenRepository.save(refreshToken)
-    }
-
-    private fun deleteBeforeRefreshToken(refreshToken: RefreshToken) {
-        refreshTokenRepository.delete(refreshToken)
     }
 
 }

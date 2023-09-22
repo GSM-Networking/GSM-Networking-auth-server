@@ -8,6 +8,6 @@ import org.springframework.data.repository.CrudRepository
  */
 interface RefreshTokenRepository: CrudRepository<RefreshToken, String> {
 
-    fun findByEmail(email: String): RefreshToken
+    fun findByToken(token: String): RefreshToken?
 
 }
