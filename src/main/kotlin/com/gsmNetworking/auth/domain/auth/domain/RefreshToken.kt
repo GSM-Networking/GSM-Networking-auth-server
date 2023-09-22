@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.index.Indexed
 /**
  * 재발급 토큰 정보를 저장하는 RedisHash 클래스 입니다.
  */
-@RedisHash("refresh_token_test")
+@RedisHash("refresh_token")
 data class RefreshToken(
     @Id
     val email: String,
